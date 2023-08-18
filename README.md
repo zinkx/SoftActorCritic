@@ -9,4 +9,4 @@ To run the project, select a continuous enviroment of your choice in sac_run_sim
 Here is some example of the agent solving the pendulum environment:
 0 epochs | 50 epochs| 150 epochs
 --- | --- | ---
-<img src="pendulum_e_0.gif" width="150" height="150"/> | <img src="pendulum_e_50.gif" width="150" height="150"/> |<img src="pendulum_e_150.gif" width="150" height="150"/>
+<img src="imgs/pendulum_e_0.gif" width="150" height="150"/> | <img src="imgs/pendulum_e_50.gif" width="150" height="150"/> |<img src="imgs/pendulum_e_150.gif" width="150" height="150"/>
