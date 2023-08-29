@@ -14,7 +14,7 @@ import critic
 #import laserhockey.hockey_env as h_env
 
 class SAC():
-    def __init__(self, env, gamma, tau, alpha, lr, buffer_maxlen, device = torch.device("cuda" if torch.cuda.is_available() else "cpu"), hidden_dim=256,
+    def __init__(self, env, gamma, tau, alpha, lr, buffer_maxlen,batchsize = 64,num_episodes = 80, max_steps = 1000, device = torch.device("cuda" if torch.cuda.is_available() else "cpu"), hidden_dim=256,
         double_hidden_layer=False, use_softplus_policy=False, lr_alpha=-1, HOCKEY_MODE=True):
         self.device = device
         self.device_cpu = torch.device("cpu")
@@ -23,13 +23,13 @@ class SAC():
         # CONFIGURATIONS
     
         self.hidden_dim = hidden_dim
-        self.num_episodes= 80
-        self.max_steps = 1000
+        self.num_episodes= num_episodes
+        self.max_steps = max_steps
         self.updates = 1
         self.update_rate = 50
         self.discount_factor = gamma
         self.soft_tau = tau
-        self.batch_size = 64
+        self.batch_size = batchsize
         self.lr = lr
         
         self.HOCKEY_MODE = HOCKEY_MODE
@@ -154,7 +154,7 @@ class SAC():
         #GET POLICY LOSS
         new_action, log_prob ,_= self.policy_nw.sample_other(state)
         if update_steps % self.delay_step == 0:
-            #with torch.no_grad(): 
+            
             pred_q_value1 = self.soft_q_nw1(state,new_action)
             pred_q_value2 = self.soft_q_nw2(state,new_action)
         
@@ -236,14 +236,13 @@ class SAC():
                     else:    
                         next_state,reward, done, _ = self.env.step(action)
                 next_state = np.squeeze(next_state)
-                self.D.push(state,action,reward,next_state,done)#.add_Batch(state,action,reward,next_state,done)
+                self.D.push(state,action,reward,next_state,done)
                 if(bool(done)):
                     self.env.reset()
                     break
                 state = next_state
                 episode_reward+=reward
                 
-                #if(step%self.update_rate==0):
                 if frames > self.batch_size:
                     for j in range (self.updates):
                         #print(step)

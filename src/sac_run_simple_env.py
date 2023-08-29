@@ -18,10 +18,10 @@ lr = 3e-4
 batch_size = 64
 episodes = 550
 buffer_maxlen = 1000000
-max_episodes = 5000
+max_episodes = 1000
 state = env.reset()
 
-agent = SAC(env, gamma, tau, alpha, lr, buffer_maxlen, device= torch.device('cpu'),hidden_dim=128, HOCKEY_MODE = False)
+agent = SAC(env, gamma, tau, alpha, lr, buffer_maxlen, batchsize=batch_size, max_steps=max_episodes,device= torch.device('cpu'),hidden_dim=128, HOCKEY_MODE = False)
 
 def train(env, agent, max_episodes, batch_size):
     frames = 0
